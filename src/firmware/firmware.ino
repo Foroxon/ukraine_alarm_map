@@ -16,7 +16,7 @@
 #include <ArduinoJson.h>
 #include <esp_system.h>
 
-String VERSION = "3.5";
+String VERSION = "3.5.1";
 
 struct Settings {
   char*         apssid                 = "JAAM";
