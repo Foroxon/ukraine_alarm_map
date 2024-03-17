@@ -1,6 +1,6 @@
 {
     "name": "JAAM Lite",
-    "version": "3.8b-34_lite",
+    "version": "3.9_lite",<
     "funding_url": "http://alerts.net.ua/",
     "new_install_prompt_erase": true,
     "builds": [
