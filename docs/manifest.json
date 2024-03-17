@@ -1,6 +1,6 @@
 {
     "name": "JAAM",
-    "version": "3.10",<
+    "version": "3.10",
     "funding_url": "http://alerts.net.ua/",
     "new_install_prompt_erase": true,
     "builds": [
