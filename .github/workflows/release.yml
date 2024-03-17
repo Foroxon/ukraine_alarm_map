@@ -78,10 +78,10 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/bin/
           mkdir -p ${{ github.workspace }}/bin_beta/
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin/${{ inputs.release-version }}.bin
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin/latest.bin
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin_beta/${{ inputs.release-version }}.bin
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin_beta/latest_beta.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin/${{ inputs.release-version }}.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin/latest.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin_beta/${{ inputs.release-version }}.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin_beta/latest_beta.bin
       - name: Leave only 3 recent releases
         run: |
           cd ${{ github.workspace }}/bin/
