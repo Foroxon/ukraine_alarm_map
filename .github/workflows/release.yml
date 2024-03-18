@@ -56,13 +56,14 @@ jobs:
   release_firmware:
     needs: [build, build_lite]
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # environment:
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
     permissions:
-      contents: write
-      pages: write
-      id-token: write
+      contents: read
+    #   contents: write
+    #   pages: write
+    #   id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -128,15 +129,17 @@ jobs:
           head_to_merge: ${{ steps.commit_changes.outputs.commit_hash }}
           message: Sync Release ${{ inputs.release-version }} to develop
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '${{ github.workspace }}/pages'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Upload Flasher to Github Pages
+        uses: ./.github/workflows/.github/workflows/upload-pages
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v4
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: '${{ github.workspace }}/pages'
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4
       - name: Update server bin list
         uses: appleboy/ssh-action@v1.0.3
         with:
