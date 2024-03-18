@@ -129,7 +129,7 @@ jobs:
           message: Sync Release ${{ inputs.release-version }} to develop
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Flasher to Github Pages
-        uses: ./.github/workflows/.github/workflows/upload-pages
+        uses: ./.github/workflows/upload-pages
       # - name: Setup Pages
       #   uses: actions/configure-pages@v4
       # - name: Upload artifact
