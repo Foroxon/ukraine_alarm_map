@@ -21,28 +21,34 @@ runs:
   steps:
     - name: Copy bin to flesher
       if: ${{ inputs.binary_path != '' }}
+      shell: bash
       run: |
         cp -f ${{ inputs.binary_path }} ${{ github.workspace }}/pages/bins/jaam.bin
     - name: Change version in flasher
       if: ${{ inputs.binary_path != '' }}
+      shell: bash
       run: |
         sed -i 's/>Встановити JAAM [0-9.]*</>Встановити JAAM ${{ inputs.version }}</' ${{ github.workspace }}/pages/index.html
         sed -i 's/"version": ".*",/"version": "${{ inputs.version }}",/' ${{ github.workspace }}/pages/manifest.json
     - name: Copy beta bin to flasher
       if: ${{ inputs.beta_binary_path != '' }}
+      shell: bash
       run: |
         cp -f ${{ inputs.beta_binary_path }} ${{ github.workspace }}/pages/bins/jaam_beta.bin
     - name: Change beta version in flasher
       if: ${{ inputs.beta_binary_path != '' }}
+      shell: bash
       run: |
         sed -i 's/>Встановити JAAM [0-9.]* Beta</>Встановити JAAM ${{ inputs.version }} Beta</' ${{ github.workspace }}/pages/index.html
         sed -i 's/"version": ".*",/"version": "${{ inputs.version }}-b${{ inputs.beta_build }}",/' ${{ github.workspace }}/pages/manifest-beta.json
     - name: Copy lite bin to flasher
       if: ${{ inputs.lite_binary_path != '' }}
+      shell: bash
       run: |
         cp -f ${{ inputs.lite_binary_path }} ${{ github.workspace }}/pages/bins/jaam_lite.bin
     - name: Change lite version in flasher
       if: ${{ inputs.lite_binary_path != '' }}
+      shell: bash
       run: |
         sed -i 's/>Встановити JAAM [0-9.]* Lite</>Встановити JAAM ${{ inputs.version }} Lite</' ${{ github.workspace }}/pages/index.html
         sed -i 's/"version": ".*",/"version": "${{ inputs.version }}",/' ${{ github.workspace }}/pages/manifest-lite.json
