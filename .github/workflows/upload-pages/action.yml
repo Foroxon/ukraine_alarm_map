@@ -3,13 +3,6 @@ description: 'Upload Flasher to Github Pages'
 
 runs:
   using: 'composite'
-  environment:
-    name: github-pages
-    url: ${{ steps.deployment.outputs.page_url }}
-  permissions:
-    contents: write
-    pages: write
-    id-token: write
   steps:
     - name: Setup Pages
       uses: actions/configure-pages@v4
