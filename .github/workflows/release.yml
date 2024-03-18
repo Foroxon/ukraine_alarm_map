@@ -56,8 +56,13 @@ jobs:
   release_firmware:
     needs: [build, build_lite]
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       contents: write
+      pages: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,19 +96,20 @@ jobs:
           cd ${{ github.workspace }}
       - name: Copy bins to flasher
         run: |
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/docs/bins/jaam.bin
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin/JAAM_${{ inputs.release-version }}_lite.bin ${{ github.workspace }}/docs/bins/jaam_lite.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/pages/bins/jaam.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin/JAAM_${{ inputs.release-version }}_lite.bin ${{ github.workspace }}/pages/bins/jaam_lite.bin
       - name: Change version in flasher
         run: |
-          sed -i 's/>JAAM Flasher .*</>JAAM Flasher ${{ inputs.release-version }}</' ${{ github.workspace }}/docs/index.html
-          sed -i 's/"version": ".*",/"version": "${{ inputs.release-version }}",/' ${{ github.workspace }}/docs/manifest.json
-          sed -i 's/"version": ".*",/"version": "${{ inputs.release-version }}_lite",/' ${{ github.workspace }}/docs/manifest-lite.json
+          sed -i 's/>Встановити JAAM [1-9]\d*(\.[1-9]\d*)*</>Встановити JAAM ${{ inputs.release-version }}</' ${{ github.workspace }}/pages/index.html
+          sed -i 's/>Встановити JAAM [1-9]\d*(\.[1-9]\d*)* Lite</>Встановити JAAM ${{ inputs.release-version }} Lite</' ${{ github.workspace }}/pages/index.html
+          sed -i 's/"version": ".*",/"version": "${{ inputs.release-version }}",/' ${{ github.workspace }}/pages/manifest.json
+          sed -i 's/"version": ".*",/"version": "${{ inputs.release-version }}_lite",/' ${{ github.workspace }}/pages/manifest-lite.json
       - name: Commit changes
         id: commit_changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Release ${{ inputs.release-version }}"
-          file_pattern: ${{ github.workspace }}/src/firmware/firmware.ino ${{ github.workspace }}/bin/ ${{ github.workspace }}/bin_beta/ ${{ github.workspace }}/docs/
+          file_pattern: ${{ github.workspace }}/src/firmware/firmware.ino ${{ github.workspace }}/bin/ ${{ github.workspace }}/bin_beta/ ${{ github.workspace }}/pages/
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
@@ -122,6 +128,15 @@ jobs:
           head_to_merge: ${{ steps.commit_changes.outputs.commit_hash }}
           message: Sync Release ${{ inputs.release-version }} to develop
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '${{ github.workspace }}/pages'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
       - name: Update server bin list
         uses: appleboy/ssh-action@v1.0.3
         with:
