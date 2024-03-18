@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      # url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       contents: write
       pages: write
@@ -40,15 +39,12 @@ jobs:
           cd ${{ github.workspace }}/bin_beta/
           ls -tp | grep -v '/$' | tail -n +5 | xargs -I {} rm -- {}
           cd ${{ github.workspace }}
-      - name: Copy bin to flasher
-        run: |
-          cp -f ${{ github.workspace }}/JAAM_${{ env.BETA_VERSION }}.bin ${{ github.workspace }}/pages/bins/jaam_beta.bin
-      - name: Change version in flasher
-        run: |
-          sed -i 's/>Встановити JAAM [1-9]\d*(\.[1-9]\d*)* Beta</>Встановити JAAM ${{ inputs.release-version }} Beta</' ${{ github.workspace }}/pages/index.html
-          sed -i 's/"version": ".*",/"version": "${{ env.BETA_VERSION }}",/' ${{ github.workspace }}/pages/manifest-beta.json
       - name: Upload flasher to Github Pages
         uses: ./.github/workflows/upload-pages
+        with:
+          beta_binary_path: ${{ github.workspace }}/JAAM_${{ env.BETA_VERSION }}.bin
+          version: ${{ inputs.release-version }}
+          beta_build: ${{ github.run_number }}
       - name: Commit changes
         id: commit_changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -66,15 +62,6 @@ jobs:
           allowUpdates: true
           prerelease: true
           makeLatest: false
-      # - name: Setup Pages
-      #   uses: actions/configure-pages@v4
-      # - name: Upload artifact
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: '${{ github.workspace }}/pages'
-      # - name: Deploy to GitHub Pages
-      #   id: deployment
-      #   uses: actions/deploy-pages@v4
       - name: Update server test bin list
         uses: appleboy/ssh-action@v1.0.3
         with:
