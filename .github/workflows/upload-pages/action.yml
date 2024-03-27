@@ -34,7 +34,7 @@ runs:
       if: ${{ inputs.binary_path != '' }}
       shell: bash
       run: |
-        esptool --chip esp32 merge_bin \
+        esptool.py --chip esp32 merge_bin \
           -o ${{ github.workspace }}/jaam-merged.bin \
           --flash_mode dio \
           --flash_freq 80m \
@@ -55,7 +55,7 @@ runs:
       if: ${{ inputs.beta_binary_path != '' }}
       shell: bash
       run: |
-        esptool --chip esp32 merge_bin \
+        esptool.py --chip esp32 merge_bin \
           -o ${{ github.workspace }}/jaam-beta-merged.bin \
           --flash_mode dio \
           --flash_freq 80m \
@@ -76,7 +76,7 @@ runs:
       if: ${{ inputs.lite_binary_path != '' }}
       shell: bash
       run: |
-        esptool --chip esp32 merge_bin \
+        esptool.py --chip esp32 merge_bin \
           -o ${{ github.workspace }}/jaam-lite-merged.bin \
           --flash_mode dio \
           --flash_freq 80m \
