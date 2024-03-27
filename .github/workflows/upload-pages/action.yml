@@ -16,6 +16,13 @@ inputs:
   beta_build:
     description: 'Beta build number'
     default: ''
+  bootloader_path:
+    description: 'Path to the bootloader bin'
+    default: '${{ github.workspace }}/src/firmware/build/esp32.esp32.esp32/firmware.ino.bootloader.bin'
+  partition_table_path:
+    description: 'Path to the partition bin'
+    default: '${{ github.workspace }}/src/firmware/build/esp32.esp32.esp32/firmware.ino.partitions.bin'
+
 runs:
   using: 'composite'
   steps:
@@ -23,7 +30,17 @@ runs:
       if: ${{ inputs.binary_path != '' }}
       shell: bash
       run: |
-        cp -f ${{ inputs.binary_path }} ${{ github.workspace }}/flasher/bins/jaam.bin
+        esptool --chip esp32 merge_bin \
+          -o ${{ github.workspace }}/jaam-merged.bin \
+          --flash_mode dio \
+          --flash_freq 80m \
+          --flash_size 4MB \
+          0x1000 ${{ inputs.bootloader_path }} \
+          0x8000 ${{ inputs.partition_table_path }} \
+          0xe000 ${{ github.workspace }}/flasher/bins/jaam.boot.bin \
+          0x10000 ${{ inputs.binary_path }}
+
+        cp -f ${{ github.workspace }}/jaam-merged.bin ${{ github.workspace }}/flasher/bins/jaam.bin
     - name: Change version in flasher
       if: ${{ inputs.binary_path != '' }}
       shell: bash
@@ -34,7 +51,17 @@ runs:
       if: ${{ inputs.beta_binary_path != '' }}
       shell: bash
       run: |
-        cp -f ${{ inputs.beta_binary_path }} ${{ github.workspace }}/flasher/bins/jaam_beta.bin
+        esptool --chip esp32 merge_bin \
+          -o ${{ github.workspace }}/jaam-beta-merged.bin \
+          --flash_mode dio \
+          --flash_freq 80m \
+          --flash_size 4MB \
+          0x1000 ${{ inputs.bootloader_path }} \
+          0x8000 ${{ inputs.partition_table_path }} \
+          0xe000 ${{ github.workspace }}/flasher/bins/jaam.boot.bin \
+          0x10000 ${{ inputs.beta_binary_path }}
+          
+        cp -f ${{ github.workspace }}/jaam-beta-merged.bin ${{ github.workspace }}/flasher/bins/jaam_beta.bin
     - name: Change beta version in flasher
       if: ${{ inputs.beta_binary_path != '' }}
       shell: bash
@@ -45,7 +72,17 @@ runs:
       if: ${{ inputs.lite_binary_path != '' }}
       shell: bash
       run: |
-        cp -f ${{ inputs.lite_binary_path }} ${{ github.workspace }}/flasher/bins/jaam_lite.bin
+        esptool --chip esp32 merge_bin \
+          -o ${{ github.workspace }}/jaam-lite-merged.bin \
+          --flash_mode dio \
+          --flash_freq 80m \
+          --flash_size 4MB \
+          0x1000 ${{ inputs.bootloader_path }} \
+          0x8000 ${{ inputs.partition_table_path }} \
+          0xe000 ${{ github.workspace }}/flasher/bins/jaam.boot.bin \
+          0x10000 ${{ inputs.lite_binary_path }}
+
+        cp -f ${{ github.workspace }}/jaam-lite-merged.bin ${{ github.workspace }}/flasher/bins/jaam_lite.bin
     - name: Change lite version in flasher
       if: ${{ inputs.lite_binary_path != '' }}
       shell: bash
