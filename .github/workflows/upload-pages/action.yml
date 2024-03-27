@@ -26,7 +26,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Copy bin to flesher
+    - name: Install ESPTool
+      shell: bash
+      run: |
+        pip install esptool
+    - name: Merge and copy bin to flesher
       if: ${{ inputs.binary_path != '' }}
       shell: bash
       run: |
@@ -47,7 +51,7 @@ runs:
       run: |
         sed -i 's/>Встановити JAAM [0-9.]*</>Встановити JAAM ${{ inputs.version }}</' ${{ github.workspace }}/flasher/index.html
         sed -i 's/"version": ".*",/"version": "${{ inputs.version }}",/' ${{ github.workspace }}/flasher/manifest.json
-    - name: Copy beta bin to flasher
+    - name: Merge and copy beta bin to flasher
       if: ${{ inputs.beta_binary_path != '' }}
       shell: bash
       run: |
@@ -68,7 +72,7 @@ runs:
       run: |
         sed -i 's/>Встановити JAAM [0-9.]* Beta [0-9]*</>Встановити JAAM ${{ inputs.version }} Beta ${{ inputs.beta_build }}</' ${{ github.workspace }}/flasher/index.html
         sed -i 's/"version": ".*",/"version": "${{ inputs.version }}-b${{ inputs.beta_build }}",/' ${{ github.workspace }}/flasher/manifest-beta.json
-    - name: Copy lite bin to flasher
+    - name: Merge and copy lite bin to flasher
       if: ${{ inputs.lite_binary_path != '' }}
       shell: bash
       run: |
