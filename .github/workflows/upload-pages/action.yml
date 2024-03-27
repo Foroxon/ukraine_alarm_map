@@ -37,7 +37,7 @@ runs:
         esptool.py --chip esp32 merge_bin \
           -o ${{ github.workspace }}/jaam-merged.bin \
           --flash_mode dio \
-          --flash_freq 80m \
+          --flash_freq 40m \
           --flash_size 4MB \
           0x1000 ${{ inputs.bootloader_path }} \
           0x8000 ${{ inputs.partition_table_path }} \
@@ -58,7 +58,7 @@ runs:
         esptool.py --chip esp32 merge_bin \
           -o ${{ github.workspace }}/jaam-beta-merged.bin \
           --flash_mode dio \
-          --flash_freq 80m \
+          --flash_freq 40m \
           --flash_size 4MB \
           0x1000 ${{ inputs.bootloader_path }} \
           0x8000 ${{ inputs.partition_table_path }} \
@@ -79,7 +79,7 @@ runs:
         esptool.py --chip esp32 merge_bin \
           -o ${{ github.workspace }}/jaam-lite-merged.bin \
           --flash_mode dio \
-          --flash_freq 80m \
+          --flash_freq 40m \
           --flash_size 4MB \
           0x1000 ${{ inputs.bootloader_path }} \
           0x8000 ${{ inputs.partition_table_path }} \
