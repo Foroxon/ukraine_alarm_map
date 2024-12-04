@@ -2,13 +2,13 @@ name: 'Upload Flasher to Github Pages'
 description: 'Upload Flasher to Github Pages'
 inputs:
   binary_path:
-    description: 'Path to the binary'
+    description: 'Path to the binaries folder'
     default: ''
   beta_binary_path:
-    description: 'Path to the beta binary'
+    description: 'Path to the beta binaries folder'
     default: ''
   lite_binary_path:
-    description: 'Path to the lite binary'
+    description: 'Path to the lite binaries folder'
     default: ''
   version:
     description: 'Version of the binary'
@@ -19,11 +19,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Copy bin to flesher
+    - name: Copy bin to flasher
       if: ${{ inputs.binary_path != '' }}
       shell: bash
       run: |
-        cp -f ${{ inputs.binary_path }} ${{ github.workspace }}/flasher/bins/jaam.bin
+        cp -f ${{ inputs.binary_path }}/firmware.bin ${{ github.workspace }}/flasher/bins/jaam.fw.bin
+        cp -f ${{ inputs.binary_path }}/bootloader.bin ${{ github.workspace }}/flasher/bins/jaam.bootloader.bin
+        cp -f ${{ inputs.binary_path }}/partitions.bin ${{ github.workspace }}/flasher/bins/jaam.partitions.bin
     - name: Change version in flasher
       if: ${{ inputs.binary_path != '' }}
       shell: bash
@@ -34,7 +36,9 @@ runs:
       if: ${{ inputs.beta_binary_path != '' }}
       shell: bash
       run: |
-        cp -f ${{ inputs.beta_binary_path }} ${{ github.workspace }}/flasher/bins/jaam_beta.bin
+        cp -f ${{ inputs.beta_binary_path }}/firmware.bin ${{ github.workspace }}/flasher/bins/jaam.fw.beta.bin
+        cp -f ${{ inputs.beta_binary_path }}/bootloader.bin ${{ github.workspace }}/flasher/bins/jaam.bootloader.beta.bin
+        cp -f ${{ inputs.beta_binary_path }}/partitions.bin ${{ github.workspace }}/flasher/bins/jaam.partitions.beta.bin
     - name: Change beta version in flasher
       if: ${{ inputs.beta_binary_path != '' }}
       shell: bash
@@ -45,7 +49,9 @@ runs:
       if: ${{ inputs.lite_binary_path != '' }}
       shell: bash
       run: |
-        cp -f ${{ inputs.lite_binary_path }} ${{ github.workspace }}/flasher/bins/jaam_lite.bin
+        cp -f ${{ inputs.lite_binary_path }}/firmware.bin ${{ github.workspace }}/flasher/bins/jaam.fw.lite.bin
+        cp -f ${{ inputs.lite_binary_path }}/bootloader.bin ${{ github.workspace }}/flasher/bins/jaam.bootloader.lite.bin
+        cp -f ${{ inputs.lite_binary_path }}/partitions.bin ${{ github.workspace }}/flasher/bins/jaam.partitions.lite.bin
     - name: Change lite version in flasher
       if: ${{ inputs.lite_binary_path != '' }}
       shell: bash

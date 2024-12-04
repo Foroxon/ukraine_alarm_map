@@ -42,9 +42,9 @@ jobs:
       - name: Upload flasher to Github Pages
         uses: ./.github/workflows/upload-pages
         with:
-          beta_binary_path: ${{ github.workspace }}/JAAM_${{ env.BETA_VERSION }}.bin
+          beta_binary_path: ${{ github.workspace }}/firmware/.pio/build/firmware
           version: ${{ inputs.release-version }}
-          beta_build: ${{ github.run_number }}  
+          beta_build: ${{ github.run_number }}
       - name: Commit changes
         id: commit_changes
         uses: stefanzweifel/git-auto-commit-action@v5

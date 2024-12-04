@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: JAAM_${{ inputs.release-version }}.bin
-          path: ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin
+          path: ${{ github.workspace }}/firmware/.pio/build/firmware/*.bin
   build_lite:
     if: ${{ github.ref_name == 'master' }}
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: JAAM_${{ inputs.release-version }}_lite.bin
-          path: ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin
+          path: ${{ github.workspace }}/firmware/.pio/build/firmware/*.bin
   release_firmware:
     needs: [build, build_lite]
     runs-on: ubuntu-latest
@@ -80,8 +80,10 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/bin/
           mkdir -p ${{ github.workspace }}/bin_beta/
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin/${{ inputs.release-version }}.bin
-          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin ${{ github.workspace }}/bin_beta/${{ inputs.release-version }}.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/firmware.bin ${{ github.workspace }}/bin/${{ inputs.release-version }}.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/firmware.bin ${{ github.workspace }}/bin_beta/${{ inputs.release-version }}.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/firmware.bin ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin
+          cp -f ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin/firmware.bin ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin/JAAM_${{ inputs.release-version }}_lite.bin
       # Disabled for now
       # - name: Leave only 3 recent releases
       #   run: |
@@ -93,8 +95,8 @@ jobs:
       - name: Upload flasher to Github Pages
         uses: ./.github/workflows/upload-pages
         with:
-          binary_path: ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin/JAAM_${{ inputs.release-version }}.bin
-          lite_binary_path: ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin/JAAM_${{ inputs.release-version }}_lite.bin
+          binary_path: ${{ github.workspace }}/JAAM_${{ inputs.release-version }}.bin
+          lite_binary_path: ${{ github.workspace }}/JAAM_${{ inputs.release-version }}_lite.bin
           version: ${{ inputs.release-version }}
       - name: Commit changes
         id: commit_changes
