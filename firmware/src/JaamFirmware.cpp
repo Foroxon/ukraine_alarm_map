@@ -26,7 +26,7 @@
 #include <melody_factory.h>
 #endif
 
-const PROGMEM char* VERSION = "4.0";
+const PROGMEM char* VERSION = "4.1";
 
 struct Settings {
   const char*   apssid                 = "JAAM";
